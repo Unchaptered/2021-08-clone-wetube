@@ -3,7 +3,7 @@ const fakeUser={
 };
 
 // Fake DB
-let videos=[
+const videos=[
     {
         title:"001 Video",
         rating:5,
@@ -31,26 +31,43 @@ let videos=[
 ];
 
 export const globalHotVideo=(req,res)=>{
-    return res.render("home", { pageTitle: `Home`, videos}); // name of PUG
+    return res.render(`home`, { pageTitle: `Home`, videos}); // name of PUG
 }
 export const globalSearchVideo=(req,res)=>{
-    return res.render("search", { pageTitle: 'Hi'});
+    return res.render(`search`, { pageTitle: 'Search Video'});
 }
-export const uploadVideo=(req,res)=>{
-    return res.render("uploadvideo", { pageTitle: `Upload: Vid`});
+
+export const getUploadVideo=(req,res)=>{
+    return res.render(`getuploadvideo`, { pageTitle: 'Upload Video'});
 }
+export const postUploadVideo=(req,res)=>{
+    const { title }=req.body;
+    const newVideo={
+        title: title,
+        rating:0,
+        comments:0,
+        createdAt: "Just Now",
+        views:0,
+        id:videos.length+1,
+    }
+    videos.push(newVideo);
+    // Here We will add a video to the videos array
+    return res.redirect(`/`);
+}
+
+
 export const seeVideo=(req,res)=>{
     const { id } = req.params;
     // const id=req.params.id;
     const video=videos[id-1];
     console.log(`show video ${id}`);
-    return res.render("seevideo", { pageTitle: `See: ${video.title}`, video});
+    return res.render(`seevideo`, { pageTitle: `See: ${video.title}`, video});
 }
 export const getEditVideo=(req,res)=>{
     const { id } = req.params;
     // const id=req.params.id;
     const video=videos[id-1];
-    return res.render("geteditvideo", { pageTitle: `Editing: ${video.title}`,video});
+    return res.render(`geteditvideo`, { pageTitle: `Editing: ${video.title}`,video});
 }
 export const postEditVideo=(req,res)=>{
     const { id } = req.params;
@@ -59,7 +76,5 @@ export const postEditVideo=(req,res)=>{
     return res.redirect(`/`);
 }
 export const deleteVideo=(req,res)=>{
-    return res.render("deletevideo", { pageTitle: `Delete: Vid`});
+    return res.render(`deletevideo`, { pageTitle: `Delete: Vid`});
 }
-
-const hi="hi";
