@@ -1,0 +1,24 @@
+extends base.pug
+
+block content
+    h4 Chage Title of [#{video.title}]
+    form(method="POST") 
+        input(name="title",placeholder="Video Title",value=video.title,required)
+        input(value="Save",type="submit")
+
+        //- ACTION
+        //- [action=""] means where data, in form, going (URL)?
+        //- But, We already have (URL)..
+        //- So, we don't have to use [action=""]...
+        //- [action=""] makes new URL
+
+        //- REQEUST
+        //- We have two kind of request  
+        //- first, [GET request]
+        //- second, [POST request]
+
+        //- When you use [GET request].
+        //- If you want to connect some page... You need to use [GET request].
+
+        //- When you use [POST request].
+        //- If you want to change some DB... You need to use [POST request].

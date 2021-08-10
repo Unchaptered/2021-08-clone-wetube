@@ -1,0 +1,19 @@
+//- NomadCorders (watch.pug)
+extends base.pug
+
+block content
+    h3 #{video.views === 1 ? "view" : "views"} : #{video.views}
+    h4 #{video.comments === 1 ? "comment" : "comments"} : #{video.comments}
+    h5 created : #{video.createdAt}
+    a(href=`${video.id}/edit`) Edit Video &rarr;
+    //- absolute and relative  URL
+    
+    //- Check Absolute URL and Relat=ive URL
+
+    //- localhost:4000/profile/edit-profile/password
+    //- =========> a(href="potate")
+    //- localhost:4000/profile/edit-profile/potato
+
+    //- localhost:4000/profile/edit-profile/password
+    //- =========> a(href="/potate")
+    //- localhost:4000/potato
