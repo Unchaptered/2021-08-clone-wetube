@@ -7,7 +7,7 @@
     "url": "(https://github.com/Unchaptered/2021-08-clone-wetube)"
   },
   "scripts": {
-    "dev": "nodemon --exec babel-node src/index.js"
+    "dev": "nodemon --exec babel-node src/init.js"
   },
   "author": "Unchaptered<workstation19961002@gmail.com>",
   "license": "MIT",

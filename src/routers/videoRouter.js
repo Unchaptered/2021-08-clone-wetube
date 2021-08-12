@@ -5,9 +5,9 @@ const videoRouter=express.Router();
 // videoRouter.get("/upload",getUploadVideo);
 videoRouter.route("/upload").get(getUploadVideo).post(postUploadVideo);
 
-videoRouter.get("/:id(\\d+)",seeVideo);
-videoRouter.route("/:id(\\d+)/edit").get(getEditVideo).post(postEditVideo);
-// videoRouter.get("/:id(\\d+)/delete",deleteVideo);
+videoRouter.get("/:id([0-9a-f]{24})",seeVideo);
+videoRouter.route("/:id([0-9a-f]{24})/edit").get(getEditVideo).post(postEditVideo);
+videoRouter.route("/:id([0-9a-f]{24})/delete").get(deleteVideo);
 
 export default videoRouter;
 

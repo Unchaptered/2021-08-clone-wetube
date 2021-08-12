@@ -4,7 +4,12 @@ include mixins/video
 block content
     h1 Reccomanded Video 
     ul
-        each info in videos
-            +video(info)
+        each video in videoConstructors
+            +video(video)
         else
             li Sorry Nothing found.
+
+            //- videoConstructors 는 videoController.js 의 function globalHotVideo 안에 정의되어 있다.
+            
+            //-  each video in videoConstructors    :::: videoConstructors 안의 각의 video 에게
+            //-  +video(video)                      :::: video Object 전체를 video MIXIN 로 보내고 있다.
