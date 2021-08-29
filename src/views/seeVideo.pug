@@ -2,12 +2,17 @@
 extends base.pug
 
 block content
-    p=videoNow.description
-    small=videoNow.creationAt
-    br
-    a(href=`${videoNow.id}/edit`) Edit Video &rarr;
-    br
-    a(href=`${videoNow.id}/delete`) Delete Video &rarr;
+    video(src="/"+videoNow.fileUrl, controls) 
+    div
+        p=videoNow.description
+        small=videoNow.creationAt
+    div
+        small Uploaded by 
+            a(href=`/users/${videoNow.owner._id}`) #{videoNow.owner.name}
+    if String(videoNow.owner._id) === String(loggedInUser._id)
+        a(href=`${videoNow.id}/edit`) Edit Video &rarr;
+        br
+        a(href=`${videoNow.id}/delete`) Delete Video &rarr;
     //- absolute and relative  URL
     
     //- Check Absolute URL and Relat=ive URL

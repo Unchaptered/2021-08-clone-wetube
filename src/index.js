@@ -1,9 +1,14 @@
 
+
 import express from "express";
 import morgan from "morgan";
-import globalRouter from "./routers/globalRouter";
+import session from "express-session";
+import MongoStore from "connect-mongo";
+
+import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
+import { localsMiddleware } from "./middleware";
 
 // console.log(process.cwd());
 const app=express();
@@ -14,9 +19,26 @@ app.set("views", process.cwd()+"/src/views");
 app.use(logger);
 // Make your express(Application) understand [form]
 app.use(express.urlencoded({extended:true}));
+
+// MiddlewareSession
+app.use(
+    session({
+        secret: process.env.COOKIE_SECRET,
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+            // 1ms 단위
+            maxAge: 7 * 24 * 3600 * 1000,
+        },
+        store: MongoStore.create({ mongoUrl: process.env.DB_URL }),
+    })
+);
+// MiddlewareLocals
+app.use(localsMiddleware);
 // Management your URL systemactically
-app.use("/",globalRouter);
+app.use("/",rootRouter);
 app.use("/users",userRouter);
 app.use("/videos", videoRouter);
+app.use("/uploads", express.static("uploads"));
 
 export default app;

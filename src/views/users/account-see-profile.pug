@@ -1,0 +1,9 @@
+extends ../base
+include ../mixins/video
+
+block content
+    ul
+        each video in userDB.childVideo
+            +video(video)
+        else
+            li Sorry Nothing found.

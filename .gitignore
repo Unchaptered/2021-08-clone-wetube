@@ -1,3 +1,4 @@
-
+.env
 handwriting/
 node_modules/
+uploads/
