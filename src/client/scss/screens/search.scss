@@ -1,0 +1,25 @@
+.search__form {
+  display: flex;
+  align-items: center;
+
+  max-width: 320px;
+  margin: 0 auto;
+  margin-bottom: 50px;
+  position: relative;
+  input {
+    all: unset;
+    padding: $search_padding-vertical $search_padding-horizontal;
+    // padding: $search_padding-vertical $search_padding-horizonal;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: $border_radius;
+    background-color: black;
+    width: 90%;
+  }
+  button {
+    all: unset;
+    text-align: center;
+    padding: 10px;
+    position: absolute;
+    right: 5px;
+  }
+}

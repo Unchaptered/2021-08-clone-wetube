@@ -2,7 +2,9 @@ extends ../base
 include ../mixins/video
 
 block content
-    ul
+    div.seeProfile__box
+        img(src="/"+userDB.avatarUrl)
+    div.home__videos-grid
         each video in userDB.childVideo
             +video(video)
         else

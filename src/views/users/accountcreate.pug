@@ -3,7 +3,7 @@ extends ../base.pug
 block content
     if errorMessage
         span=errorMessage
-    form(method="POST")
+    form(method="POST").accountCreate__form
         input(name="name", placeholder="Name", type="text", required)
         input(name="email", placeholder="Email", type="email", required)
         input(name="username", placeholder="Username", type="text", required)
@@ -11,6 +11,7 @@ block content
         input(name="password2", placeholder="Confirm Password", type="password", required)
         input(name="location", placeholder="Location", type="text", required)
         input(value="Create", type="submit")
+    br
     hr
     div
         span Already have an account? 

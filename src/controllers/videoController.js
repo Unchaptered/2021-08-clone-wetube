@@ -2,19 +2,23 @@ import videoConstructor from "../models/Video";
 import userConstructor from "../models/User";
 
 export const rootHotVideo=async(req,res)=>{
-    const videoConstructors=await videoConstructor.find({}).sort({ creationAt: "asc"});
+    const videoConstructors=await videoConstructor
+    .find({})
+    .sort({ creationAt: `desc`})
+    .populate(`owner`);
     return res.render(`home`, { pageTitle: `Home`, videoConstructors}); 
 }
 export const rootSearchVideo=async(req,res)=>{
     const { keyword }=req.query;
     let videoSearch=[];
     if(keyword){
-        videoSearch=await videoConstructor.find({
+        videoSearch=await videoConstructor
+        .find({
             title: {
                 $regex: new RegExp(`${keyword}$`, `i`),
                 // i means 대소문자 구분안함
-            },
-        });
+            }})
+        .populate(`owner`);
     }
     return res.render(`search`, { pageTitle: 'Search Video', videoSearch });
 }
@@ -29,7 +33,7 @@ export const seeVideo=async(req,res)=>{
         });
     } else {
         return res.render(`seevideo`, {
-            pageTitle: `See: ${videoNow.title}`,
+            pageTitle: `👀 ${videoNow.title}`,
             videoNow,
         });
     }
@@ -47,7 +51,7 @@ export const getEditVideo=async(req,res)=>{
             pageTitle: `Video not found.`, videoNow
         });
     } else if (String(videoNow.owner) !== _id) {
-        return res.status(403).redirect("/");
+        return res.status(403).redirect(`/`);
     } else {
         return res.render(`geteditvideo`, {
             pageTitle: `Editing: ${videoNow.title}`, videoNow
@@ -91,7 +95,7 @@ export const deleteVideo=async(req,res)=>{
         return res.redirect(`/`);
     }
 
-    return res.redirect("/");
+    return res.redirect(`/`);
 }
 // Uplaod 업로드
 export const getUploadVideo=(req,res)=>{

@@ -39,6 +39,8 @@ app.use(localsMiddleware);
 app.use("/",rootRouter);
 app.use("/users",userRouter);
 app.use("/videos", videoRouter);
+// Static Files (Open File (Everyone can see))
 app.use("/uploads", express.static("uploads"));
+app.use("/design", express.static("assets"));
 
 export default app;

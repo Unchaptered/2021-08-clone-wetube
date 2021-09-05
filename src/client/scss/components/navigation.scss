@@ -1,0 +1,31 @@
+header {
+  padding: $haeder_padding-vertical $haeder_padding-horizontal;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .header__logo {
+    color: $logo_color;
+    font-size: $logo_size;
+  }
+  ul {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    li {
+      font-size: $list_size;
+      font-weight: $list_weight;
+      margin-left: $list_margin-left;
+      text-transform: uppercase;
+    }
+    i {
+      font-size: $icon_size;
+    }
+  }
+  .header__btn {
+    background-color: white;
+    color: $button_color;
+    padding: 5px 10px;
+    border-radius: $border_radius;
+  }
+}

@@ -3,7 +3,7 @@ extends base.pug
 block content
     if errorMessage
         span=errorMessage
-    form(method="POST", enctype="multipart/form-data")
+    form(method="POST", enctype="multipart/form-data").upload__form
         label(for="video") Video File
         input(type="file", accept="video/*", id="video", name="video",required)
         

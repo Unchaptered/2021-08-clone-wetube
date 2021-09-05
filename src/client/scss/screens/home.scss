@@ -1,0 +1,8 @@
+.home__videos-grid {
+  display: grid;
+  gap: 30px;
+  grid-template-columns: repeat(3, 1fr);
+
+  //settings
+  //   background-color: lightcoral;
+}

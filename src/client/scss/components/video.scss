@@ -1,0 +1,30 @@
+// video mixin
+
+.video__box {
+  .video__thumb {
+    height: 220px;
+    width: 100%;
+    background-color: ivory;
+    border-radius: $border_radius-7;
+  }
+  .video__meta {
+    padding: $video_padding-vertical $video_padding-horizontal;
+    .video__title {
+      display: block;
+      font-size: $video_size;
+      margin-top: $video_margin-top;
+    }
+    .video__views {
+      font-size: $video_size-12;
+      margin-top: $video_margin-top-5;
+    }
+  }
+  //   settings
+
+  //   .video__description {
+  //   }
+  //   .video__hashtags {
+  //   }
+  //   .video__createdAt {
+  //   }
+}

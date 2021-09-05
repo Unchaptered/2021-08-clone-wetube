@@ -3,24 +3,37 @@ extends base.pug
 
 block content
     video(src="/"+videoNow.fileUrl, controls) 
-    div
-        p=videoNow.description
-        small=videoNow.creationAt
-    div
-        small Uploaded by 
-            a(href=`/users/${videoNow.owner._id}`) #{videoNow.owner.name}
-    if String(videoNow.owner._id) === String(loggedInUser._id)
-        a(href=`${videoNow.id}/edit`) Edit Video &rarr;
-        br
-        a(href=`${videoNow.id}/delete`) Delete Video &rarr;
-    //- absolute and relative  URL
-    
-    //- Check Absolute URL and Relat=ive URL
+    div.video__content
+        button#vid__play Play
+        button#vid__mute Mute
+        span#vid__time 00:00/00:00
+        input(type="range",step="0.2", min="0", max="1")#vid__volumne
+        
 
-    //- localhost:4000/profile/edit-profile/password
-    //- =========> a(href="potate")
-    //- localhost:4000/profile/edit-profile/potato
+    //-
+        div
+            p=videoNow.description
+            small=videoNow.creationAt
+        div
+            small Uploaded by 
+                a(href=`/users/${videoNow.owner._id}`) #{videoNow.owner.name}
+        if String(videoNow.owner._id) === String(loggedInUser._id)
+            a(href=`${videoNow.id}/edit`) Edit Video &rarr;
+            br
+            a(href=`${videoNow.id}/delete`) Delete Video &rarr;
 
-    //- localhost:4000/profile/edit-profile/password
-    //- =========> a(href="/potate")
-    //- localhost:4000/potato
+
+    block scripts
+        script(src="/design/js/videoPlayer.js")
+    //-
+        absolute and relative  URL
+        
+        Check Absolute URL and Relat=ive URL
+
+        localhost:4000/profile/edit-profile/password
+        =========> a(href="potate")
+        localhost:4000/profile/edit-profile/potato
+
+        localhost:4000/profile/edit-profile/password
+        =========> a(href="/potate")
+        localhost:4000/potato

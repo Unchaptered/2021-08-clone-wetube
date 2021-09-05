@@ -1,13 +1,12 @@
 extends base.pug
 include mixins/video
 
-block content   
-    h1 Reccomanded Video 
-    ul
+block content
+    div.home__videos-grid
         each video in videoConstructors
             +video(video)
         else
-            li Sorry Nothing found.
+            span.message_not-found Any Videos Found
 
             //- videoConstructors 는 videoController.js 의 function globalHotVideo 안에 정의되어 있다.
             

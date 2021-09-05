@@ -2,30 +2,15 @@ doctype html
 html(lang="ko")
     head
         title #{pageTitle} | #{siteName}
-        link(rel="stylesheet" href="http://unpkg.com/mvp.css")
-    body 
-        header
-            h1=pageTitle
-            nav
-                ul
-                    li 
-                        a(href=`/`) Home
-                    li
-                        a(href=`/search`) search
-                    if loggedIn
-                        li 
-                            a(href=`/videos/upload`) Upload
-                        li
-                            a(href=`/users/${loggedInUser._id}`) #{loggedInUser.name}_프로필
-                        li
-                            a(href=`/users/edit`) Edit profile
-                        li
-                            a(href=`/users/logout`) Log out
-                    else
-                        li
-                            a(href=`/join`) join
-                        li
-                            a(href=`/login`) login
+        //- link(rel="stylesheet" href="http://unpkg.com/mvp.css")
+        link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css")
+        link(rel="stylesheet" href="/design/reset.css")
+        link(rel="stylesheet" href="/design/css/styles.css")
+    body
+        include partials/navigation.pug
         main 
+            h1.pageTitle=pageTitle
             block content
     include partials/footer.pug
+    
+    block scripts

@@ -1,4 +1,8 @@
 .env
+.gitignore
+
 handwriting/
 node_modules/
 uploads/
+assets/
+sample/
