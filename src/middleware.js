@@ -7,16 +7,16 @@ export const localsMiddleware=(req,res,next)=>{
     // console.log(res.locals);
     // console.log(req.session.user);
     next();
-}
+};
 
 // Unlogin User can't excess several URL. :: protectorMiddleware
 export const preventURLMiddleware=(req,res,next)=>{
     if(req.session.loggedIn){
-    next();
+        next();
     } else {
         return res.redirect(`/login`);
     }
-}
+};
 // Login user can't login twice. :: publicOnlyMiddleware
 export const preventReLoginMiddleware=(req,res,next)=>{
     if(!req.session.loggedIn){
@@ -24,7 +24,7 @@ export const preventReLoginMiddleware=(req,res,next)=>{
     } else {
         return res.render(`/`);
     }
-}
+};
 // Upload Form(multer) Middleware :: uploadFiles
 export const uploadAvatarMiddleware=multer({
     dest: "uploads/avatars/",

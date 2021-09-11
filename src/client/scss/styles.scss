@@ -2,9 +2,13 @@
 @import "./config/_variables";
 @import "./config/_reset";
 
+// mixins
+
+@import "./mixins/video";
+
 // Components
 
-@import "./components/video";
+@import "./components/seevideo";
 @import "./components/footer";
 @import "./components/navigation";
 @import "./components/shared";

@@ -127,3 +127,18 @@ export const postUploadVideo=async(req,res)=>{
         });
     }
 }
+
+export const registerView=async(req,res)=>{
+    const { id }=req.params;
+
+    const videoDB=await videoConstructor.findById(id);
+    
+    if(!videoDB) {
+        return res.sendStatus(404);
+    } else {
+        videoDB.meta.views=videoDB.meta.views+1;
+        await videoDB.save();
+
+        return res.sendStatus(200);
+    }
+}

@@ -15,6 +15,7 @@ module.exports={
         // main, videoPlayer = [name]
         main: "./src/client/js/main.js",
         videoPlayer: "./src/client/js/videoPlayer.js",
+        videoRecorder: "./src/client/js/videoRecorder.js",
     },
     mode: "development",
     watch: true,

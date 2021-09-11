@@ -1,30 +1,22 @@
-// video mixin
+// ../mixins/video.pug
 
-.video__box {
-  .video__thumb {
+.vid__list {
+  .vid__thumb {
     height: 220px;
     width: 100%;
     background-color: ivory;
     border-radius: $border_radius-7;
   }
-  .video__meta {
+  .vid__meta {
     padding: $video_padding-vertical $video_padding-horizontal;
-    .video__title {
+    .vid__title {
       display: block;
       font-size: $video_size;
       margin-top: $video_margin-top;
     }
-    .video__views {
+    .vid__views {
       font-size: $video_size-12;
       margin-top: $video_margin-top-5;
     }
   }
-  //   settings
-
-  //   .video__description {
-  //   }
-  //   .video__hashtags {
-  //   }
-  //   .video__createdAt {
-  //   }
 }

@@ -5,6 +5,7 @@ import morgan from "morgan";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 
+import apiRouter from "./routers/apiRouter";
 import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
@@ -42,5 +43,6 @@ app.use("/videos", videoRouter);
 // Static Files (Open File (Everyone can see))
 app.use("/uploads", express.static("uploads"));
 app.use("/design", express.static("assets"));
+app.use("/api", apiRouter);
 
 export default app;

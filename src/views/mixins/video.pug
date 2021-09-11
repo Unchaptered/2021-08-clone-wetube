@@ -1,14 +1,8 @@
 mixin video(video)
-    div.video__box
-        div.video__thumb
-        div.video__meta
-            a.video__title(href="/videos/"+video.id)=video.title
-            div.video__views
+    div.vid__list
+        div.vid__thumb
+        div.vid__meta
+            a.vid__title(href="/videos/"+video.id)=video.title
+            div.vid__views
                 span #{video.owner.name} × 
                 span #{video.meta.views} 회
-        //- p.video__description=video.description
-        //- ul.video__hashtags
-        //-     each hashtags in video.hashtags
-        //-         li=hashtags
-        //- small.video__createdAt=video.creationAt
-        //- hr

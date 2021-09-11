@@ -2,13 +2,24 @@
 extends base.pug
 
 block content
-    video(src="/"+videoNow.fileUrl, controls) 
-    div.video__content
-        button#vid__play Play
-        button#vid__mute Mute
-        span#vid__time 00:00/00:00
-        input(type="range",step="0.2", min="0", max="1")#vid__volumne
-        
+    //- video-i-d = videoID
+    div#vid__container(data-video-i-d=videoNow._id).vid__container
+        video(src="/"+videoNow.fileUrl)
+        div#vid__controller.vid__controller__box
+            div.vid__controller__clmn-play
+                button#vid__play
+                    i.fas.fa-play
+                div
+                    span#vid__currentTime 00:00:00
+                    span  / 
+                    span#vid__totalTime 00:00:00
+            input(type="range", step="1", value="0", min="0")#vid__timelime.vid__controller__clmn-timeline
+            div.vid__controller__clmn-volume
+                input(type="range", step="0.05", value=0.5, min="0", max="1")#vid__volume
+                button#vid__mute
+                    i.fas.fa-volume-up
+                button#vid__fullscreen
+                    i.fas.fa-expand
 
     //-
         div
@@ -22,9 +33,8 @@ block content
             br
             a(href=`${videoNow.id}/delete`) Delete Video &rarr;
 
-
-    block scripts
-        script(src="/design/js/videoPlayer.js")
+block scripts
+    script(src="/design/js/videoPlayer.js")
     //-
         absolute and relative  URL
         
