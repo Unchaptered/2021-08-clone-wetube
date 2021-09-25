@@ -7,7 +7,7 @@ block content
         span=errorMessage
     form(method="POST", enctype="multipart/form-data").upload__form
         label(for="video") Video File
-        input(type="file", accept="video/*", id="video", name="video",required)
+        input(name="video", type="file", accept="video/*", id="video",required)
         
         input(name="title",type="text",placeholder="TITLE",required, maxlength=40)
         input(name="description",type="text",placeholder="DESCRIPTION", required, minlength=20, maxlength=140)
