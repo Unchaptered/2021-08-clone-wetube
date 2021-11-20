@@ -1,6 +1,6 @@
 mixin video(video)
     div.vid__list
-        div.vid__thumb
+        div.vid__thumb(style=`background-image:url(/${video.thumbUrl}); background-size:cover; background-position:center;`)
         div.vid__meta
             a.vid__title(href="/videos/"+video.id)=video.title
             div.vid__views

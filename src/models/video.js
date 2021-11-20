@@ -6,6 +6,7 @@ const videoSchema = new mongoose.Schema({
   title: { type: String, required: true, uppercase: true, trim: true, maxLength: 40 },
   description: { type: String, required: true, trim: true, minLength: 20, maxLength: 140, },
   fileUrl: { type: String, required: true },
+  thumbUrl: { type: String, required: true },
   creationAt: { type: Date, required: true, default: Date.now },
   hashtags: [{ type: String, trim: true }],
   meta: {
@@ -15,12 +16,17 @@ const videoSchema = new mongoose.Schema({
   owner: { type: mongoose.Schema.Types.ObjectId, requried: true, ref: `User` },
   childComments: [{ type: mongoose.Schema.Types.ObjectId, ref: `Comment` }],
 });
-videoSchema.static(`formatHashtags`, function (hashtags) {
+// formatHashtags 가 이름이다... 저장할 때 별도로 호출해줘야한다. formatHashtags(hastags)...
+videoSchema.static(`formatHashtags`, (hashtags)=>{
   return hashtags
     .split(",")
     .map((word) => word.replace(/\s/g, ``))
     .map((word) => (word.startsWith(`#`) ? word : `#${word}`));
 });
+videoSchema.static(`formatUrlChanges`, (url)=>{
+  return url.replace(/\\/g, "/");
+})
+
 const videoConstructor = mongoose.model("Video", videoSchema);
 
 export default videoConstructor;

@@ -1,6 +1,8 @@
 .env
 .gitignore
 
+
+backup/
 handwriting/
 node_modules/
 uploads/

@@ -102,16 +102,25 @@ export const getUploadVideo=(req,res)=>{
     return res.render(`getuploadvideo`, { pageTitle: 'Upload Video'});
 }
 export const postUploadVideo=async(req,res)=>{
+    // video[0].path 의 http 주소가 \\ 로 작성되어 있어서 videoSchema.pre 에서 \\ 를 /로 바꾸는 함수를 실행하고
     const {
-        file: { path: fileUrl },
+        files: { video, thumbnail:thumb },
         session: { user: { _id } },
         body: { title, description, hashtags },
     }=req;
     try {
+        if((video[0].mimetype.split("/")[0]!="video") && (thumb[0].mimetype.split("/")[0]!="image")){
+            res.status(400).render(`getuploadvideo`, {
+                pageTitle:'Upload Video',
+                errorMessage:"Please check the file extension.",
+            });
+        }
+
         const uploadVideo=await videoConstructor.create({
             title,
             description,
-            fileUrl,
+            fileUrl:videoConstructor.formatUrlChanges(video[0].path,),
+            thumbUrl:videoConstructor.formatUrlChanges(thumb[0].path),
             owner: _id,
             hashtags:videoConstructor.formatHashtags(hashtags),
         });

@@ -2,13 +2,16 @@ extends base.pug
 
 block content
     div
-        video#preview
-        button#startBtn Start Recording 
+        video#videoPreview
+        button#recordBtn Start Recording 
     if errorMessage
         span=errorMessage
     form(method="POST", enctype="multipart/form-data").upload__form
         label(for="video") Video File
-        input(name="video", type="file", accept="video/*", id="video",required)
+        input(name="video", id="video", type="file", accept="video/*",required)
+        
+        label(for="thumbnail") Thumbnail File
+        input(name="thumbnail", id="thumbnail", type="file", accept="image/*",required)
         
         input(name="title",type="text",placeholder="TITLE",required, maxlength=40)
         input(name="description",type="text",placeholder="DESCRIPTION", required, minlength=20, maxlength=140)

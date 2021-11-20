@@ -8,7 +8,10 @@ videoRouter
     .route("/upload")
     .all(preventURLMiddleware)
     .get(getUploadVideo)
-    .post(uploadVideoMiddleware.single(`video`),postUploadVideo);
+    .post(uploadVideoMiddleware.fields([
+        { name:"video",maxCount:1 },
+        { name:"thumbnail",maxCount:1 }
+    ]),postUploadVideo);
 
 videoRouter
     .route("/:id([0-9a-f]{24})")
