@@ -1,12 +1,18 @@
 import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
 
-const recordBtn=document.getElementById("recordBtn");
-const video=document.getElementById("videoPreview");
+const recordBox=document.getElementById("record__form");
+const recordBtn=recordBox.querySelector(".record__btn");
+const recordTime=recordBox.querySelector(".record__currentTime");
+const video=recordBox.querySelector("video");
 
 let stream;
 let recorder;
+let recordVidTime=0;
+let recordInterver;
 let webmFile;
-
+const recordFormat=(seconds)=>{
+    return new Date(seconds*1000).toISOString().substr(11,8);
+}
 /*  ffmpeg 를 web assembly module 을 통해서 브라우저에서 사용 중이다.
     ffmpeg 관련 메서드의 키워드들은 관련 문서를 확인하자.
     관련 프로세스는 해당 줄에 대한 주석과 동시에 최하단에 달아두었다.
@@ -16,7 +22,6 @@ let webmFile;
     Blob 관련 링크 : https://velog.io/@unchapterd/JS-Blob
     ffmepg 관련 링크 : https://velog.io/@unchapterd/ffmepg
 */
-
 const files={
     input: "recording.webm",
     output: "output.mp4",
@@ -31,7 +36,7 @@ const recordDownload=(fileUrl,fileName)=>{
 };
 const recordFfmpeg=async()=>{
     recordBtn.removeEventListener("click",recordFfmpeg);
-    recordBtn.innerText="Transcoding...";
+    recordBtn.innerText="변환 중...";
     recordBtn.disabled=true;
 
     const ffmpeg=createFFmpeg({corePath:"/convert/ffmpeg-core.js",log:true});
@@ -73,26 +78,33 @@ const recordFfmpeg=async()=>{
     URL.revokeObjectURL(webmFile);
 
     recordBtn.addEventListener("click",recordFfmpeg);
-    recordBtn.innerText="Download Recording";
+    recordBtn.innerText="다운로드";
     recordBtn.disabled=false;
 
 };
 const recordStop=()=>{
-    recordBtn.innerText="Download Recording";
+    recordBtn.innerText="다운로드";
     recordBtn.removeEventListener("click", recordStop);
     recordBtn.addEventListener("click", recordFfmpeg);
 
     recorder.stop();
+    clearInterval(recordInterver);
 };
 const recordStart=()=>{
     recordBtn.disabled=true;
     setInterval(()=>{recordBtn.disabled=false},3000);
     
-    recordBtn.innerText="Stop Recording";
+    recordTime.innerText=recordFormat(0);
+    recordInterver=setInterval(()=>{
+        recordTime.innerText=recordFormat(recordVidTime++);
+    },1000);
+
+    recordBtn.innerText="녹화 중지";
     recordBtn.removeEventListener("click", recordStart);
     recordBtn.addEventListener("click", recordStop);
 
     recorder=new MediaRecorder(stream, { mimeType: "video/webm" });
+    console.log(recorder);
     recorder.ondataavailable=(event)=>{
         webmFile=URL.createObjectURL(event.data);
         video.srcObject=null;
@@ -114,6 +126,8 @@ const recordPreview=async()=>{
     video.volume=0;
     video.play();
 };
+
+console.log();
 recordPreview();
 
 recordBtn.addEventListener("click", recordStart);

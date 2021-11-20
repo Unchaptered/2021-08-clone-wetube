@@ -3,7 +3,8 @@
 .accountCreate__form,
 .editProfile__form,
 .video__content,
-.upload__form {
+.upload__form,
+#record__form {
   max-width: 420px;
   margin: 0 auto;
 
@@ -31,6 +32,16 @@
   }
   input:last-child {
     margin-bottom: 0;
+  }
+}
+#record__form {
+  margin-bottom: 30px;
+  & > video {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  & > div {
+    display: flex;
   }
 }
 

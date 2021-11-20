@@ -3,7 +3,8 @@ include ../mixins/video
 
 block content
     div.seeProfile__box
-        img(src="/"+userDB.avatarUrl)
+        if userDB.avatarUrl !== "none"
+            img(src="/"+userDB.avatarUrl)
     div.home__videos-grid
         each video in userDB.childVideo
             +video(video)

@@ -1,9 +1,12 @@
 extends base.pug
 
 block content
-    div
-        video#videoPreview
-        button#recordBtn Start Recording 
+    div#record__form
+        video
+        div
+            button.record__btn 녹화 시작
+            span.record__currentTime 현재 시간
+
     if errorMessage
         span=errorMessage
     form(method="POST", enctype="multipart/form-data").upload__form
