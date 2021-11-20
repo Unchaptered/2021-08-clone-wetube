@@ -1,3 +1,5 @@
+console.log("videoPlayer.js on");
+
 const vid__container=document.getElementById("vid__container");
 const vid__controller=document.getElementById("vid__controller");
 

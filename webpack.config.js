@@ -8,14 +8,16 @@
 */
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
+const BASE_PATH="./src/client/js/";
 
 // Webpack read code reverse, such as backside to frontside.
 module.exports={
     entry: {
         // main, videoPlayer = [name]
-        main: "./src/client/js/main.js",
-        videoPlayer: "./src/client/js/videoPlayer.js",
-        videoRecorder: "./src/client/js/videoRecorder.js",
+        main: BASE_PATH+"main.js",
+        videoPlayer: BASE_PATH+"videoPlayer.js",
+        videoRecorder: BASE_PATH+"videoRecorder.js",
+        commentSection: BASE_PATH+"commentSection.js",
     },
     mode: "development",
     watch: true,

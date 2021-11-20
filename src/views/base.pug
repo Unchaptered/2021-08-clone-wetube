@@ -7,6 +7,8 @@ html(lang="ko")
         link(rel="stylesheet" href="/design/reset.css")
         link(rel="stylesheet" href="/design/css/styles.css")
     body
+        if messages.error
+            spna=messages.error
         include partials/navigation.pug
         main 
             h1.pageTitle=pageTitle

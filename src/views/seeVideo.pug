@@ -20,6 +20,13 @@ block content
                     i.fas.fa-volume-up
                 button#vid__fullscreen
                     i.fas.fa-expand
+    
+    if loggedIn
+        div.video__comments
+            form.video__form#commentForm
+                textarea(cols="30", rows="10", placeholder="Write Nice Comment...")
+                button Add Comment
+    else
 
     //-
         div
@@ -35,6 +42,8 @@ block content
 
 block scripts
     script(src="/design/js/videoPlayer.js")
+    if loggedIn
+        script(src="/design/js/commentSection.js")
     //-
         absolute and relative  URL
         
