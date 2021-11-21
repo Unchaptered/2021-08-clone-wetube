@@ -4,7 +4,8 @@ block content
     div#record__form
         video
         div
-            button.record__btn 녹화 시작
+            button(type="button").record__device 기기 확인
+            button(type="button").record__btn 녹화 시작
             span.record__currentTime 현재 시간
 
     if errorMessage
@@ -14,10 +15,10 @@ block content
         input(name="video", id="video", type="file", accept="video/*",required)
         
         label(for="thumbnail") Thumbnail File
-        input(name="thumbnail", id="thumbnail", type="file", accept="image/*",required)
+        input(name="thumbnail", id="thumbnail", type="file", accept="image/*")
         
         input(name="title",type="text",placeholder="TITLE",required, maxlength=40)
-        input(name="description",type="text",placeholder="DESCRIPTION", required, minlength=20, maxlength=140)
+        input(name="description",type="text",placeholder="DESCRIPTION (min 10 text)", required, minlength=20, maxlength=140)
         input(name="hashtags",type="text",placeholder="HASHTAGS, sepertated by comma(,).", required)
         input(type="submit", value="submit")
 

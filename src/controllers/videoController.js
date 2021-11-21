@@ -26,6 +26,7 @@ export const rootSearchVideo=async(req,res)=>{
 export const seeVideo=async(req,res)=>{
     const { id } = req.params;
     const videoNow=await videoConstructor.findById(id).populate(`owner`);
+    console.log(videoNow);
     if (!videoNow){
         return res.render(`404`, {
             pageTitle: `Video not found.`,
@@ -109,18 +110,25 @@ export const postUploadVideo=async(req,res)=>{
         body: { title, description, hashtags },
     }=req;
     try {
-        if((video[0].mimetype.split("/")[0]!="video") && (thumb[0].mimetype.split("/")[0]!="image")){
-            res.status(400).render(`getuploadvideo`, {
-                pageTitle:'Upload Video',
-                errorMessage:"Please check the file extension.",
-            });
+        if(thumb===undefined){
+            if(video[0].mimetype.split("/")[0]!="video")
+                res.status(400).render("getuploadvideo", {
+                    pageTitle:"Upload Video",
+                    errorMessage:"Please check the file extension.",
+                });
+        } else {
+            if((video[0].mimetype.split("/")[0]!="video") && (thumb[0].mimetype.split("/")[0]!="image"))
+                res.status(400).render("getuploadvideo", {
+                    pageTitle:"Upload Video",
+                    errorMessage:"Please check the file extension.",
+                });
         }
 
         const uploadVideo=await videoConstructor.create({
             title,
             description,
-            fileUrl:videoConstructor.formatUrlChanges(video[0].path,),
-            thumbUrl:videoConstructor.formatUrlChanges(thumb[0].path),
+            fileUrl:videoConstructor.formatUrlChanges(video[0].path),
+            thumbUrl:thumb===undefined ? null : videoConstructor.formatUrlChanges(thumb[0].path),
             owner: _id,
             hashtags:videoConstructor.formatHashtags(hashtags),
         });
