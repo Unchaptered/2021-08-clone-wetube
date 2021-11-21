@@ -19,6 +19,7 @@ app.set("views", process.cwd() + "/src/views");
 app.use(logger);
 // Make your express(Application) understand [form]
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // MiddlewareSession
 app.use(

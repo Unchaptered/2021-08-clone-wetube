@@ -7,13 +7,22 @@ const form=document.getElementById("commentForm");
 const handleSubmit=(event)=>{
     event.preventDefault();
     const textarea=form.querySelector("textarea");
-    const btn=form.querySelector("button");
+    const comment=textarea.value;
+    const videoID=videoContainer.dataset.videoID;
 
+    if(comment==="") return;
+    
+    fetch(`/api/videos/${videoID}/comment`,{
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body:JSON.stringify({ comment })
+    });
 
-    const text=textarea.value;
-    const video=videoContainer.dataset.videoID;
+    textarea.value="";
 };
 
 if(form){
-    form.addEventListener("click",handleSubmit);
+    form.addEventListener("submit",handleSubmit);
 }

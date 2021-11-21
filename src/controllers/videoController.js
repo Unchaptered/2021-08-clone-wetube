@@ -1,5 +1,6 @@
 import videoConstructor from "../models/Video";
 import userConstructor from "../models/User";
+import commentContructor from "../models/Comment";
 
 export const rootHotVideo=async(req,res)=>{
     const videoConstructors=await videoConstructor
@@ -7,7 +8,7 @@ export const rootHotVideo=async(req,res)=>{
     .sort({ creationAt: `desc`})
     .populate(`owner`);
     return res.render(`home`, { pageTitle: `Home`, videoConstructors}); 
-}
+};
 export const rootSearchVideo=async(req,res)=>{
     const { keyword }=req.query;
     let videoSearch=[];
@@ -21,12 +22,11 @@ export const rootSearchVideo=async(req,res)=>{
         .populate(`owner`);
     }
     return res.render(`search`, { pageTitle: 'Search Video', videoSearch });
-}
+};
 
 export const seeVideo=async(req,res)=>{
     const { id } = req.params;
-    const videoNow=await videoConstructor.findById(id).populate(`owner`);
-    console.log(videoNow);
+    const videoNow=await videoConstructor.findById(id).populate(`owner`).populate("childComments");
     if (!videoNow){
         return res.render(`404`, {
             pageTitle: `Video not found.`,
@@ -38,7 +38,7 @@ export const seeVideo=async(req,res)=>{
             videoNow,
         });
     }
-}
+};
 // Edit 편집
 export const getEditVideo=async(req,res)=>{
     const {
@@ -58,7 +58,7 @@ export const getEditVideo=async(req,res)=>{
             pageTitle: `Editing: ${videoNow.title}`, videoNow
         });
     }
-}
+};
 export const postEditVideo=async(req,res)=>{
     const { id } = req.params;
     const { title, description, hashtags }=req.body;
@@ -74,7 +74,7 @@ export const postEditVideo=async(req,res)=>{
         });
         return res.redirect(`/`);
     }
-}
+};
 // Delete 삭제
 export const deleteVideo=async(req,res)=>{
     const {
@@ -97,11 +97,11 @@ export const deleteVideo=async(req,res)=>{
     }
 
     return res.redirect(`/`);
-}
+};
 // Uplaod 업로드
 export const getUploadVideo=(req,res)=>{
     return res.render(`getuploadvideo`, { pageTitle: 'Upload Video'});
-}
+};
 export const postUploadVideo=async(req,res)=>{
     // video[0].path 의 http 주소가 \\ 로 작성되어 있어서 videoSchema.pre 에서 \\ 를 /로 바꾸는 함수를 실행하고
     const {
@@ -143,8 +143,9 @@ export const postUploadVideo=async(req,res)=>{
             errorMessage:error,
         });
     }
-}
+};
 
+// to apiRouters
 export const registerView=async(req,res)=>{
     const { id }=req.params;
 
@@ -158,4 +159,29 @@ export const registerView=async(req,res)=>{
 
         return res.sendStatus(200);
     }
-}
+};
+export const createComment=async(req,res)=>{
+    const {
+        params:{ id },
+        body:{ comment:text },
+        session:{ user },
+    }=req;
+
+    const videoDB=await videoConstructor.findById(id);
+    if(!videoDB){
+        return res.sendStatus(404);
+    }
+
+    const commentDB=await commentContructor.create({
+        text,
+        owner:user._id,
+        video:id
+    });
+
+    videoDB.childComments.push(commentDB._id);
+    videoDB.save();
+
+    return res.sendStatus(201);X
+
+    res.end();
+};
