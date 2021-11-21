@@ -1,6 +1,8 @@
 import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
+import { async } from "regenerator-runtime";
 
 const recordBox=document.getElementById("record__form");
+const recordDevice=recordBox.querySelector(".record__device");
 const recordBtn=recordBox.querySelector(".record__btn");
 const recordTime=recordBox.querySelector(".record__currentTime");
 const video=recordBox.querySelector("video");
@@ -119,7 +121,7 @@ const recordStart=()=>{
 };
 const recordPreview=async()=>{
     stream = await navigator.mediaDevices.getUserMedia({
-        audio: true,
+        audio: false,
         video: true
     });
     video.srcObject=stream;
@@ -127,7 +129,17 @@ const recordPreview=async()=>{
     video.play();
 };
 
-console.log();
+const recordDeivceBoolean=async()=>{
+    recordDevice.innerText="검사 중...";
+
+    const recordDeviceList=await navigator.mediaDevices.enumerateDevices();
+
+    setInterval(()=>{
+        recordDevice.innerText=recordDeviceList ? "기기 존재" : "기기 없음";
+    },1500);
+};
+
 recordPreview();
 
 recordBtn.addEventListener("click", recordStart);
+recordDevice.addEventListener("click", recordDeivceBoolean);
