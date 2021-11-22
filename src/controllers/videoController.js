@@ -164,6 +164,5 @@ export const deleteComment=async(req,res)=>{
     videoDB.childComments.pop(commentID);
     videoDB.save();
     const commentDB=await commentContructor.findByIdAndDelete(commentID);
-    console.log(videoDB);
     return res.sendStatus(200);
 };

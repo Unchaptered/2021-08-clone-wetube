@@ -7,8 +7,12 @@
     "url": "(https://github.com/Unchaptered/2021-08-clone-wetube)"
   },
   "scripts": {
-    "dev": "nodemon",
-    "assets": "webpack"
+    "start": "node build/init.js",
+    "build": "npm run build:server && npm run build:assets",
+    "build:server": "babel src -d build",
+    "build:assets": "webpack --mode=production",
+    "dev:server": "nodemon",
+    "assets:assets": "webpack --mode=development --watch"
   },
   "author": "Unchaptered<workstation19961002@gmail.com>",
   "license": "MIT",

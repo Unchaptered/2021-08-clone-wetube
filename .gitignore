@@ -2,9 +2,10 @@
 .gitignore
 
 
-backup/
-handwriting/
-node_modules/
-uploads/
-assets/
-sample/
+/backup
+/handwriting
+/node_modules
+/uploads
+/assets
+/sample
+/build

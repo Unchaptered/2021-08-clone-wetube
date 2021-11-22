@@ -19,8 +19,8 @@ module.exports={
         videoRecorder: BASE_PATH+"videoRecorder.js",
         commentCraetor: BASE_PATH+"commentCraetor.js",
     },
-    mode: "development",
-    watch: true,
+    // mode: "development",
+    // watch: true,
     plugins: [
         new MiniCssExtractPlugin({
                 filename: "css/styles.css",
