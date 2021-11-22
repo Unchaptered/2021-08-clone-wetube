@@ -1,15 +1,14 @@
-extends base.pug
-include mixins/video
+extends ../base.pug
+include ../mixins/mixin-video.pug
 
 block content
     form(mothod="GET").search__form
         input(name="keyword", placeholder="Serach by Title", type="text")
-        //- input(type="submit", value="Search Now")
         button
             i.fas.fa-search
 
     div.home__videos-grid
-        each video in videoSearch
+        each video in videoDB
             +video(video)
         else
             span.message_not-found Any Videos Found

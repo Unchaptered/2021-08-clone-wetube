@@ -1,131 +1,131 @@
 console.log("videoPlayer.js on");
 
-const vid__container=document.getElementById("vid__container");
-const vid__controller=document.getElementById("vid__controller");
+const container=document.getElementById("vid__container");
+const controller=document.getElementById("vid__controller");
 
-const vid=document.querySelector("video");
-const vid__play=document.getElementById("vid__play");
-const vid__mute=document.getElementById("vid__mute");
-const vid__volume=document.getElementById("vid__volume");
-const vid__currentTime=document.getElementById("vid__currentTime");
-const vid__totalTime=document.getElementById("vid__totalTime");
-const vid__timelime=document.getElementById("vid__timelime");
-const vid__fullscreen=document.getElementById("vid__fullscreen");
+const vid=container.querySelector("video");
+const playBtn=document.getElementById("vid__play");
+const muteBtn=document.getElementById("vid__mute");
+const volumeInput=document.getElementById("vid__volume");
+const currentTimeInput=document.getElementById("vid__currentTime");
+const totalTimeInput=document.getElementById("vid__totalTime");
+const timelineInput=document.getElementById("vid__timelime");
+const fullscreenBtn=document.getElementById("vid__fullscreen");
 
-const vid__play__icon=vid__play.querySelector("i");
-const vid__mute__icon=vid__mute.querySelector("i");
-const vid__fullscreen__icon=vid__fullscreen.querySelector("i");
+const playBtnIcon=playBtn.querySelector("i");
+const muteBtnIcon=muteBtn.querySelector("i");
+const fullscreenBtnIcon=fullscreenBtn.querySelector("i");
 
-let vid__volumeTMP=0.5;
-vid.volume=vid__volumeTMP;
+let vidVolumneTmp=0.5;
+vid.volume=vidVolumneTmp;
 
-const func_formatTime=(seconds)=>{
+const setTimeformat=(seconds)=>{
     return new Date(seconds*1000).toISOString().substr(11,8);
 }
-const func_playClick=()=>{
+const setPlayMode=()=>{
     vid.paused ? vid.play() : vid.pause();
 
-    vid__play__icon.className= vid.paused ? "fas fa-play" : "fas fa-pause";
+    playBtnIcon.className= vid.paused ? "fas fa-play" : "fas fa-pause";
 };
-const func_muteClick=()=>{
+const setMuteMode=()=>{
     vid.muted ? vid.muted=false : vid.muted=true;
 
-    vid__mute__icon.className=vid.muted ? "fas fa-volume-mute" : "fas fa-volume-up";
+    muteBtnIcon.className=vid.muted ? "fas fa-volume-mute" : "fas fa-volume-up";
 
-    vid__volume.value= vid.muted ? 0 : vid__volumeTMP;
+    volumeInput.value= vid.muted ? 0 : vidVolumneTmp;
 };
-const func_volumeChange=(event)=>{
+const setVolumeChange=(event)=>{
     const { value }=event.target;
 
     if(vid.muted){
         vid.muted=false;
-        vid__mute__icon.className="fas fa-volume-up";
+        muteBtnIcon.className="fas fa-volume-up";
     }
     
-    vid__volumeTMP=value;
+    vidVolumneTmp=value;
     vid.volume=value;
 };
-const func_timelineChange=(event)=>{
+const setTimelineChange=(event)=>{
     const { value }=event.target;
 
     vid.currentTime=value;
 }
-const func_fullscreen=()=>{
+const setFullscreenChange=()=>{
     if(document.fullscreenElement){
         document.exitFullscreen();
-        vid__fullscreen__icon.className="fas fa-expand";
+        fullscreenBtnIcon.className="fas fa-expand";
     } else {
-        vid__container.requestFullscreen();
-        vid__fullscreen__icon.className="fas fa-compress";
+        container.requestFullscreen();
+        fullscreenBtnIcon.className="fas fa-compress";
     }
 }
 
-const func_metaUpadte=()=>{
-    vid__currentTime.innerText=func_formatTime(Math.floor(vid.currentTime)); // Current
-    vid__timelime.value=Math.floor(vid.currentTime);
+const videoMetaDataUpadte=()=>{
+    currentTimeInput.innerText=setTimeformat(Math.floor(vid.currentTime)); // Current
+    timelineInput.value=Math.floor(vid.currentTime);
 }
-const func_metaData=()=>{
-    vid__totalTime.innerText=func_formatTime(Math.floor(vid.duration)); // Total
-    vid__timelime.max=Math.floor(vid.duration);
+const videoMetaData=()=>{
+    totalTimeInput.innerText=setTimeformat(Math.floor(vid.duration)); // Total
+    timelineInput.max=Math.floor(vid.duration);
 }
-const func_videoEnded=()=>{
-    const { videoID }=vid__container.dataset;
+const videoEnded=()=>{
+    const { videoID }=container.dataset;
     fetch(`/api/videos/${videoID}/view`, {
         method: "POST",
     });
 }
-let vid__controllerTimeout=null; // Hover on vid
-let vid__controllerMoveTimeout=null; // Move on vid
-const func_hideController=()=>vid__controller.classList.remove("showing");
-const func_mousemove=()=>{
-    if(vid__controllerTimeout){
-        clearTimeout(vid__controllerTimeout);
-        vid__controllerTimeout=null;
+
+let controllerOnTimeout=null;
+let controllerLeaveTimeout=null;
+const hideController=()=>controller.classList.remove("showing");
+const mouseOver=()=>{
+    if(controllerOnTimeout){
+        clearTimeout(controllerOnTimeout);
+        controllerOnTimeout=null;
     }
 
-    if(vid__controllerMoveTimeout){
-        clearTimeout(vid__controllerMoveTimeout);
-        vid__controllerMoveTimeout=null;
+    if(controllerLeaveTimeout){
+        clearTimeout(controllerLeaveTimeout);
+        controllerLeaveTimeout=null;
     }
 
-    vid__controller.classList.add("showing");
-    vid__controllerMoveTimeout=setTimeout(func_hideController, 1000);
-}
-const func_mouseleave=()=>{
-    vid__controllerTimeout=setTimeout(func_hideController, 1000);
-}
-
-const func_keydown=(event)=>{
+    controller.classList.add("showing");
+    controllerLeaveTimeout=setTimeout(hideController, 1000);
+};
+const mouseLeave=()=>{
+    controllerOnTimeout=setTimeout(hideController, 1000);
+};
+const shortcutKey=(event)=>{
     const { key }=event;
 
     switch(key){
         case " ": // 일시정지
-            func_playClick();
+            setPlayMode();
             break;
         case "Enter": // 전체화면
-            func_fullscreen();
+            setFullscreenChange();
             break;
         case "Escape": // 전체화면 해제
             if(document.fullscreenElement){
                 document.exitFullscreen();
-                vid__fullscreen__icon.className="fas fa-expand";
+                fullscreenBtnIcon.className="fas fa-expand";
             }
             break;
     };
-}
+};
 
-vid__play.addEventListener("click", func_playClick);
-vid__mute.addEventListener("click", func_muteClick);
-vid__volume.addEventListener("input",func_volumeChange);
-vid__timelime.addEventListener("input",func_timelineChange);
-vid__fullscreen.addEventListener("click",func_fullscreen);
+playBtn.addEventListener("click", setPlayMode);
+muteBtn.addEventListener("click", setMuteMode);
+volumeInput.addEventListener("input",setVolumeChange);
+timelineInput.addEventListener("input",setTimelineChange);
+fullscreenBtn.addEventListener("click",setFullscreenChange);
 
-vid.addEventListener("click", func_playClick);
-vid.addEventListener("timeupdate", func_metaUpadte); // Current Time
-vid.addEventListener("loadedmetadata", func_metaData); // Total Time
-vid.addEventListener("ended", func_videoEnded);
+vid.addEventListener("click", setPlayMode);
+vid.addEventListener("timeupdate", videoMetaDataUpadte); // Current Time
+vid.addEventListener("loadedmetadata", videoMetaData); // Total Time
+vid.addEventListener("ended", videoEnded);
 
-vid__container.addEventListener("mousemove",func_mousemove);
-vid__container.addEventListener("mouseleave",func_mouseleave);
+container.addEventListener("mousemove",mouseOver);
+container.addEventListener("mouseleave",mouseLeave);
 
-document.addEventListener("keydown", func_keydown);
+document.addEventListener("keydown", shortcutKey);

@@ -1,10 +1,9 @@
 //- NomadCorders (watch.pug)
-extends base.pug
+extends ../base.pug
 
 block content
-    //- video-i-d = videoID
-    div#vid__container(data-video-i-d=videoNow._id).vid__container
-        video(src="/"+videoNow.fileUrl)
+    div#vid__container(data-video-i-d=videoDB._id).vid__container
+        video(src="/"+videoDB.fileUrl)
         div#vid__controller.vid__controller__box
             div.vid__controller__clmn-play
                 button#vid__play
@@ -22,13 +21,13 @@ block content
                     i.fas.fa-expand
     di#vid__metaContainer
         div
-            p.vid__metaTitle=videoNow.title
-            p.vid__metaCreation=videoNow.creationAt
-            a.vid__metaOwner(href=`/users/${videoNow.owner._id}`) Uploaded by #{videoNow.owner.name}
+            p.vid__metaTitle=videoDB.title
+            p.vid__metaCreation=videoDB.creationAt
+            a.vid__metaOwner(href=`/users/${videoDB.owner._id}`) Uploaded by #{videoDB.owner.name}
         div
-            a(href=`${videoNow.id}/edit`) Edit Video &rarr;
-            a(href=`${videoNow.id}/delete`) Delete Video &rarr;
-            a(href=`${videoNow.owner}/follow`) 팔로우하기 &rarr;
+            a(href=`${videoDB.id}/edit`) Edit Video &rarr;
+            a(href=`${videoDB.id}/delete`) Delete Video &rarr;
+            a(href=`${videoDB.owner}/follow`) 팔로우하기 &rarr;
     if loggedIn
         form.video__form#commentForm
             textarea(cols="30", rows="10", placeholder="Write Nice Comment...")
@@ -36,7 +35,7 @@ block content
     
     div.video__comments
         ul(data-username=loggedInUser.username)
-            each comment in videoNow.childComments.reverse()
+            each comment in videoDB.childComments.reverse()
                 li
                     i.fas.fa-comment
                     div
@@ -48,15 +47,3 @@ block scripts
     script(src="/design/js/videoPlayer.js")
     if loggedIn
         script(src="/design/js/commentSection.js")
-    //-
-        absolute and relative  URL
-        
-        Check Absolute URL and Relat=ive URL
-
-        localhost:4000/profile/edit-profile/password
-        =========> a(href="potate")
-        localhost:4000/profile/edit-profile/potato
-
-        localhost:4000/profile/edit-profile/password
-        =========> a(href="/potate")
-        localhost:4000/potato

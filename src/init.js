@@ -1,4 +1,4 @@
-import "dotenv/config"; // 환경변수 호출
+import "dotenv/config";
 
 import "./db";
 import "./models/Video";

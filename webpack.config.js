@@ -17,7 +17,7 @@ module.exports={
         main: BASE_PATH+"main.js",
         videoPlayer: BASE_PATH+"videoPlayer.js",
         videoRecorder: BASE_PATH+"videoRecorder.js",
-        commentSection: BASE_PATH+"commentSection.js",
+        commentCraetor: BASE_PATH+"commentCraetor.js",
     },
     mode: "development",
     watch: true,

@@ -1,14 +1,9 @@
 extends base.pug
-include mixins/video
+include mixins/mixin-video.pug
 
 block content
     div.home__videos-grid
-        each video in videoConstructors
+        each video in videoDB
             +video(video)
         else
             span.message_not-found Any Videos Found
-
-            //- videoConstructors 는 videoController.js 의 function globalHotVideo 안에 정의되어 있다.
-            
-            //-  each video in videoConstructors    :::: videoConstructors 안의 각의 video 에게
-            //-  +video(video)                      :::: video Object 전체를 video MIXIN 로 보내고 있다.

@@ -1,0 +1,9 @@
+extends ../base.pug
+
+block content
+    h4 Change Title of [#{videoDB.title}]
+    form(method="POST") 
+        input(name="title",type="text", value=videoDB.title,  placeholder="TITLE",required, maxlength=40)
+        input(name="description",type="text", value=videoDB.description,  placeholder="DESCRIPTION", required, minlength=20, maxlength=140)
+        input(name="hashtags",type="text", value=videoDB.hashtags.join(),  placeholder="HASHTAGS, sepertated by comma(,).", required)
+        input(value="Save",type="submit")

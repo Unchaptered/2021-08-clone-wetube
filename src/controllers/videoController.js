@@ -3,106 +3,83 @@ import userConstructor from "../models/User";
 import commentContructor from "../models/Comment";
 
 export const rootHotVideo=async(req,res)=>{
-    const videoConstructors=await videoConstructor
-    .find({})
-    .sort({ creationAt: `desc`})
-    .populate(`owner`);
-    return res.render(`home`, { pageTitle: `Home`, videoConstructors}); 
+    const videoDB=await videoConstructor
+        .find({})
+        .sort({ creationAt: "desc"})
+        .populate("owner");
+    return res.render("home", { pageTitle: "Home", videoDB}); 
 };
 export const rootSearchVideo=async(req,res)=>{
     const { keyword }=req.query;
-    let videoSearch=[];
-    if(keyword){
-        videoSearch=await videoConstructor
-        .find({
-            title: {
-                $regex: new RegExp(`${keyword}$`, `i`),
-                // i means 대소문자 구분안함
-            }})
-        .populate(`owner`);
-    }
-    return res.render(`search`, { pageTitle: 'Search Video', videoSearch });
+
+    // new RegExp 안의 파라미터 "i" 의 뜻은 대소문자 구분을 하지 않는 다는 뜻이다.
+    let videoDB=keyword ? await videoConstructor.find({ title:{ $regex: new RegExp(`${keyword}`, "i"), } }).populate("owner") : [];
+    return videoDB ?
+        res.render("video/search", { pageTitle: "Search Videos", videoDB }) :
+        res.status(404).render("video/search", { pageTitle: "Search Videos", videoDB }) ;
 };
 
-export const seeVideo=async(req,res)=>{
+export const seeVideoFile=async(req,res)=>{ 
     const { id } = req.params;
-    const videoNow=await videoConstructor.findById(id).populate(`owner`).populate("childComments");
-    if (!videoNow){
-        return res.render(`404`, {
-            pageTitle: `Video not found.`,
-            videoNow
-        });
-    } else {
-        return res.render(`seevideo`, {
-            pageTitle: `👀 ${videoNow.title}`,
-            videoNow,
-        });
-    }
+
+    const videoDB=await videoConstructor.findById(id).populate("owner").populate("childComments");
+    return videoDB ?
+        res.render("video/see-video", { pageTitle: `👀 ${videoDB.title}`, videoDB }) :
+        res.status(404).render("404", { pageTitle: "Video is not founded.", videoDB });
 };
-// Edit 편집
 export const getEditVideo=async(req,res)=>{
     const {
         params: { id },
         session: { user: { _id }},
     }=req;
 
-    const videoNow=await videoConstructor.findById(id);
-    if (!videoNow) {
-        return res.status(404).render(`404`, {
-            pageTitle: `Video not found.`, videoNow
-        });
-    } else if (String(videoNow.owner) !== _id) {
-        return res.status(403).redirect(`/`);
-    } else {
-        return res.render(`geteditvideo`, {
-            pageTitle: `Editing: ${videoNow.title}`, videoNow
-        });
-    }
+    const videoDB=await videoConstructor.findById(id);
+    
+    return !videoDB ?
+        res.status(404).render("404", { pageTitle: "Video not found."}) :
+            String(videoDB.owner)!==_id ?
+                res.status(403).redirect("/") :
+                res.render("video/edit-meta", { pageTitle: `Editing: ${videoDB.title}`, videoDB });
 };
 export const postEditVideo=async(req,res)=>{
-    const { id } = req.params;
-    const { title, description, hashtags }=req.body;
-    const videoNow=await videoConstructor.exists({_id:id});
-    // video object 를 받는 것이 아니라 true or false 만 받는 것.
-    if (!videoNow) {
-        return res.status(404).render(`404`, { pageTitle: `Video not found.`, videoNow});
+    const {
+        params: { id },
+        body: { title, description, hashtags }
+    }=req;
+
+    const videoDB=await videoConstructor.exists({_id:id});
+
+    if (!videoDB) {
+        return res.status(404).render("404", { pageTitle: "Video not found."});
     } else {
-        await videoConstructor.findByIdAndUpdate(id, {
-            title,
-            description,
-            hashtags: videoConstructor.formatHashtags(hashtags),
-        });
-        return res.redirect(`/`);
+        await videoConstructor.findByIdAndUpdate(id, { title, description, hashtags:videoConstructor.formatHashtags(hashtags) });
+        return res.redirect("/");
     }
 };
-// Delete 삭제
 export const deleteVideo=async(req,res)=>{
     const {
         params: { id },
         session: { user: { _id }},
     }=req;
-    
+
     const videoNow=await videoConstructor.findById(id);
     if (!videoNow) {
-        return res.status(404).render(`404`, {
-            pageTitle: `Video not found.`, videoNow
-        });
+        return res.status(404).render("404", { pageTitle: "Video not found." });
     } else if (String(videoNow.owner) !== _id) {
-        return res.status(403).redirect(`/`);
+        return res.status(403).redirect("/");
     } else {
         await videoConstructor.findByIdAndDelete(id);
         videoNow.childComments.forEach(async(commentID)=>{
             await commentContructor.findByIdAndRemove(commentID);
         });
-        return res.redirect(`/`);
+        return res.redirect("/");
     }
 };
-// Uplaod 업로드
 export const getUploadVideo=(req,res)=>{
-    return res.render(`getuploadvideo`, { pageTitle: 'Upload Video'});
+    return res.render("video/upload", { pageTitle: "Upload Video" });
 };
 export const postUploadVideo=async(req,res)=>{
-    // video[0].path 의 http 주소가 \\ 로 작성되어 있어서 videoSchema.pre 에서 \\ 를 /로 바꾸는 함수를 실행하고
+    // video[0].path 의 http 주소가 \\ 로 작성되어 있어서 videoSchema.pre 에서 \\ 를 /로 바꾸는 함수를 실행 중이다. 스키마 참고
     const {
         files: { video, thumbnail:thumb },
         session: { user: { _id } },
@@ -111,16 +88,10 @@ export const postUploadVideo=async(req,res)=>{
     try {
         if(thumb===undefined){
             if(video[0].mimetype.split("/")[0]!="video")
-                res.status(400).render("getuploadvideo", {
-                    pageTitle:"Upload Video",
-                    errorMessage:"Please check the file extension.",
-                });
+                return res.status(400).render("video/upload", { pageTitle:"Upload Video", errorMessage:"Please check the file extension.", });
         } else {
             if((video[0].mimetype.split("/")[0]!="video") && (thumb[0].mimetype.split("/")[0]!="image"))
-                res.status(400).render("getuploadvideo", {
-                    pageTitle:"Upload Video",
-                    errorMessage:"Please check the file extension.",
-                });
+                return res.status(400).render("video/upload", { pageTitle:"Upload Video",errorMessage:"Please check the file extension.", });
         }
         const userDB = await userConstructor.findById(_id);
 
@@ -135,18 +106,14 @@ export const postUploadVideo=async(req,res)=>{
         });
         userDB.childVideo.push(uploadVideo._id);
         userDB.save();
-        return res.redirect(`/`);
+        return res.redirect("/");
     } catch (error) {
-        // console.log(`videoController.js : ${error}`);
-        res.status(400).render(`getuploadvideo`, {
-            pageTitle:'Upload Video',
-            errorMessage:error,
-        });
+        return res.status(400).render("video/upload", { pageTitle:"Upload Video", errorMessage:error });
     }
 };
 
-// to apiRouters
-export const registerView=async(req,res)=>{
+// about apiRouter
+export const modifyVideo=async(req,res)=>{
     const { id }=req.params;
 
     const videoDB=await videoConstructor.findById(id);
