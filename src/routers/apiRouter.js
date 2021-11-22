@@ -1,5 +1,5 @@
 import express  from "express";
-import { registerView, createComment } from "../controllers/videoController";
+import { registerView, createComment, deleteComment } from "../controllers/videoController";
 
 const apiRouter=express.Router();
 
@@ -12,6 +12,10 @@ apiRouter
 apiRouter
     .route("/videos/:id([0-9a-f]{24})/comment")
     .post(createComment);
+
+apiRouter
+    .route("/videos/:id([0-9a-f]{24})/comment/delete")
+    .post(deleteComment);
 
 export default apiRouter;
 

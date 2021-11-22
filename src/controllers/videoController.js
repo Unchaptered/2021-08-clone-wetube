@@ -81,9 +81,7 @@ export const deleteVideo=async(req,res)=>{
         params: { id },
         session: { user: { _id }},
     }=req;
-
-    // const videoNow=await videoConstructor.findByIdAndDelete(id);
-
+    
     const videoNow=await videoConstructor.findById(id);
     if (!videoNow) {
         return res.status(404).render(`404`, {
@@ -93,10 +91,11 @@ export const deleteVideo=async(req,res)=>{
         return res.status(403).redirect(`/`);
     } else {
         await videoConstructor.findByIdAndDelete(id);
+        videoNow.childComments.forEach(async(commentID)=>{
+            await commentContructor.findByIdAndRemove(commentID);
+        });
         return res.redirect(`/`);
     }
-
-    return res.redirect(`/`);
 };
 // Uplaod 업로드
 export const getUploadVideo=(req,res)=>{
@@ -123,6 +122,7 @@ export const postUploadVideo=async(req,res)=>{
                     errorMessage:"Please check the file extension.",
                 });
         }
+        const userDB = await userConstructor.findById(_id);
 
         const uploadVideo=await videoConstructor.create({
             title,
@@ -130,9 +130,9 @@ export const postUploadVideo=async(req,res)=>{
             fileUrl:videoConstructor.formatUrlChanges(video[0].path),
             thumbUrl:thumb===undefined ? null : videoConstructor.formatUrlChanges(thumb[0].path),
             owner: _id,
+            ownerName: userDB.username,
             hashtags:videoConstructor.formatHashtags(hashtags),
         });
-        const userDB = await userConstructor.findById(_id);
         userDB.childVideo.push(uploadVideo._id);
         userDB.save();
         return res.redirect(`/`);
@@ -175,13 +175,28 @@ export const createComment=async(req,res)=>{
     const commentDB=await commentContructor.create({
         text,
         owner:user._id,
+        ownerName:user.username,
         video:id
     });
 
     videoDB.childComments.push(commentDB._id);
     videoDB.save();
 
-    return res.sendStatus(201);X
-
-    res.end();
+    return res.sendStatus(201);
+    // res.end();
+};
+export const deleteComment=async(req,res)=>{
+    const {
+        session: { user: { _id:userID } },
+        body: {commentID, ownerID, videoID}
+    }=req;
+    if( userID!==ownerID )
+        return res.sendStatus(401);
+        
+    const videoDB=await videoConstructor.findById(videoID);
+    videoDB.childComments.pop(commentID);
+    videoDB.save();
+    const commentDB=await commentContructor.findByIdAndDelete(commentID);
+    console.log(videoDB);
+    return res.sendStatus(200);
 };

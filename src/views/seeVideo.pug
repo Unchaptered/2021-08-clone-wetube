@@ -30,18 +30,20 @@ block content
             a(href=`${videoNow.id}/delete`) Delete Video &rarr;
             a(href=`${videoNow.owner}/follow`) 팔로우하기 &rarr;
     if loggedIn
-        div.video__comments
-            form.video__form#commentForm
-                textarea(cols="30", rows="10", placeholder="Write Nice Comment...")
-                button Add Comment
-
-        div.video__commentsList
-            ul
-                each comment in videoNow.childComments.reverse()
-                    li
-                        p=comment.text
-                        p=comment.creationAt
-
+        form.video__form#commentForm
+            textarea(cols="30", rows="10", placeholder="Write Nice Comment...")
+            button Add Comment
+    
+    div.video__comments
+        ul(data-username=loggedInUser.username)
+            each comment in videoNow.childComments.reverse()
+                li
+                    i.fas.fa-comment
+                    div
+                        span=comment.text
+                        span #{comment.ownerName} / #{comment.creationAt}
+                    if String(comment.owner)===String(loggedInUser._id)
+                        i.deleteBtn.fas.fa-trash(data-owner-i-d=comment.owner, data-comment-i-d=comment._id, data-video-i-d=comment.video)
 block scripts
     script(src="/design/js/videoPlayer.js")
     if loggedIn

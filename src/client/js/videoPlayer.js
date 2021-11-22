@@ -114,7 +114,6 @@ const func_keydown=(event)=>{
     };
 }
 
-
 vid__play.addEventListener("click", func_playClick);
 vid__mute.addEventListener("click", func_muteClick);
 vid__volume.addEventListener("input",func_volumeChange);

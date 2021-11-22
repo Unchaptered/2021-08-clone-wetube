@@ -14,6 +14,7 @@ const videoSchema = new mongoose.Schema({
     rating: { type: Number, required: true, default: 0 },
   },
   owner: { type: mongoose.Schema.Types.ObjectId, requried: true, ref: `User` },
+  ownerName: { type: String },
   childComments: [{ type: mongoose.Schema.Types.ObjectId, ref: `Comment` }],
 });
 // formatHashtags 가 이름이다... 저장할 때 별도로 호출해줘야한다. formatHashtags(hastags)...
