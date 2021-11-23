@@ -1,7 +1,7 @@
 import multer from "multer";
 
 export const localsMiddleware = (req, res, next) => {
-  res.locals.siteName = `Wetube`;
+  res.locals.siteName = "Wetube";
   res.locals.loggedIn = Boolean(req.session.loggedIn);
   res.locals.loggedInUser = req.session.user || {};
   next();
@@ -13,7 +13,7 @@ export const preventURLMiddleware = (req, res, next) => {
     next();
   } else {
     req.flash("error", "Not authorized");
-    return res.status(404).redirect(`/login`);
+    return res.status(404).redirect("/login");
   }
 };
 
@@ -23,7 +23,7 @@ export const preventReLoginMiddleware = (req, res, next) => {
     return next();
   } else {
     req.flash("error", "Not authorized");
-    return res.status(403).render(`/`);
+    return res.status(403).render("/");
   }
 };
 
